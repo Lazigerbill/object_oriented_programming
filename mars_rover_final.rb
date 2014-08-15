@@ -26,12 +26,12 @@ class Rover
 	end
 	attr_reader :init_x, :init_y, :init_dir
 	def start
-		puts "Where would you like to place your droid?"
+		puts "Where would you like to place the rover?"
 		puts "\"x\" coordinates: "
 		@init_x=gets.chomp.to_i
 		puts "\"y\" coordinates: "
 		@init_y=gets.chomp.to_i
-		puts "Droid's facing direction: "
+		puts "Rover's facing direction: "
 		@init_dir=gets.chomp
 		until @init_dir=="N"||@init_dir=="E"||@init_dir=="S"||@init_dir=="W"
 			puts "Invalid direction entry, please re-enter:"
@@ -45,14 +45,15 @@ class Rover
 	end
 end
 class Motion <Rover
-	def initialize (init_x, init_y, init_dir, user_input=nil,fin_x=0, fin_y=0)
+	def initialize (init_x, init_y, init_dir, user_input=nil,fin_x=0, fin_y=0, fin_dir="")
 		super(init_x ,init_y, init_dir)
 		@user_input=user_input
 		@fin_x=fin_x
 		@fin_y=fin_y
+		@fin_dir=fin_dir
 		
 	end
-	attr_accessor :fin_y, :fin_x
+	attr_accessor :fin_y, :fin_x, :fin_dir
 	def process_input (user_input=nil)
 		puts "Please enter your commands"
 		puts "PLEASE NOTE that only \"L\" \"R\" \"M\" commands will be executed"
@@ -64,6 +65,8 @@ class Motion <Rover
 	def execute (init_x,init_y,init_dir)
 		dir_array=["N","E","S","W"]
 		steer_wheel_count=dir_array.index(@init_dir)
+		temp_x=@init_x
+		temp_y=@init_y
 		@user_input.each do |step|
 			case step
 				when "L"
@@ -73,22 +76,21 @@ class Motion <Rover
 				when "M"
 					case steer_wheel_count
 						when 0
-							@init_y+=1
+							temp_y+=1
 						when 1
-							@init_x+=1
+							temp_x+=1
 						when 2
-							@init_y-=1
+							temp_x-=1
 						when 3	
-							@init_x-=1
+							temp_y-=1
 					end
 			end
 
 
 		end
-
-		puts "Destination arrived! (#{@init_x}, #{@init_y}, #{dir_array[steer_wheel_count]})"
-		@fin_x=@init_x
-		@fin_y=@init_y
+			@fin_x=temp_x
+			@fin_y=temp_y
+			@fin_dir=dir_array[steer_wheel_count]
 	end
 		
 
@@ -101,7 +103,7 @@ rover1=Rover.new
 rover1.start
 #START POINT VALIDATION to make sure rover is within pre-determined grid#
 until mars.map_x>=rover1.init_x && mars.map_y>=rover1.init_y 
-puts "Your droid MUST be located within pre-determined grid"
+puts "The rover MUST be located within pre-determined grid"
 puts "Your defined search grid is (#{mars.map_x},#{mars.map_y})"	
 puts "Please re-enter!"
 rover1.start
@@ -109,8 +111,15 @@ end
 rover1.where_am_i
 
 #COMMAND to move rover#
-#puts rover1.init_dir,rover1.init_y,rover1.init_x
 rov_act=Motion.new(rover1.init_x,rover1.init_y,rover1.init_dir)
 rov_act.process_input
 rov_act.execute(@init_x,@init_y,@init_dir)
 
+
+#Landing check#
+until rov_act.fin_x<=mars.map_x&&rov_act.fin_y<=mars.map_y
+	puts "The rover fell out of the grid, please re-enter move command!"
+	rov_act.process_input
+	rov_act.execute(@init_x,@init_y,@init_dir)
+end
+puts "Destination arrived! (#{rov_act.fin_x}, #{rov_act.fin_y}, #{rov_act.fin_dir})"
