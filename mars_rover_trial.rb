@@ -27,8 +27,8 @@
 
 class DefineMap
 	def initialize (map_x,map_y)
-		@@map_x=map_x
-		@@map_y=map_y
+		@map_x=map_x
+		@map_y=map_y
 		# @x_occupied = []
 		# @y_occupied = []
 	end
@@ -36,10 +36,10 @@ class DefineMap
 	def define
 		puts "Please specify grid size by entering:"
 		puts "\"x\" coordinates: "
-		@@map_x=gets.chomp	
+		@map_x=gets.chomp	
 		puts "\"y\" coordinates: "
-		@@map_y=gets.chomp
-		puts "Your defined search grid is (#{@@map_x},#{@@map_y})"
+		@map_y=gets.chomp
+		puts "Your defined search grid is (#{@map_x},#{@map_y})"
 	end
 
 
