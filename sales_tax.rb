@@ -1,73 +1,70 @@
-# # Exercise 3: Sales Taxes (Challenge)
+require_relative 'CheckOut.rb'
+require_relative 'ShopBasket.rb'
 
-# # Basic sales tax is applicable at a rate of 10% on all goods, except books, food, and medical products that are exempt. 
-# Import duty is an additional sales tax applicable on all imported goods at a rate of 5%, with no exemptions.
+#####Input 1
+# my_basket={
+# 	"Book"=>{
+# 		:price=>12.49,
+# 		:i_tax=>"N",
+# 		:s_tax=>"N"
+# 	},
+# 	"Music CD"=>{
+# 		:price=>14.99,
+# 		:i_tax=>"N",
+# 		:s_tax=>"Y"
+# 	},
+# 	"Chocolate bar"=>{
+# 		:price=>0.85,
+# 		:i_tax=>"N",
+# 		:s_tax=>"N"
+# 	}
+# }
 
-# # When I purchase items I receive a receipt which lists the name of all the items and their price (including tax), 
-# finishing with the total cost of the items, and the total amounts of sales taxes paid. 
-# The rounding rules for sales tax are that for a tax rate of n%, a shelf price of p contains (np/100 rounded up to the nearest 0.05) amount of sales tax.
+# ####Input 2
+# my_basket={
+# 	"Imported box of chocolate"=>{
+# 		:price=>10.00,
+# 		:i_tax=>"Y",
+# 		:s_tax=>"N"
+# 	},
+# 	"Imported bottle of purfume"=>{
+# 		:price=>47.50,
+# 		:i_tax=>"Y",
+# 		:s_tax=>"Y"
+# 	}
+# }
 
-# # Write an application that prints out the receipt details for these shopping baskets...
+#####Input 3
+# my_basket={
+# 	"Imported perfume"=>{
+# 		:price=>27.99,
+# 		:i_tax=>"Y",
+# 		:s_tax=>"Y"
+# 	},
+# 	"Perfume"=>{
+# 		:price=>18.99,
+# 		:i_tax=>"N",
+# 		:s_tax=>"Y"
+# 	},
+# 	"Headache pills"=>{
+# 		:price=>9.75,
+# 		:i_tax=>"N",
+# 		:s_tax=>"N"
+# 	},
+# 	"Imported chocolates"=>{
+# 		:price=>11.25,
+# 		:i_tax=>"Y",
+# 		:s_tax=>"N"
+# 	},
+# }
 
-class ShopBasket
-	def initialize (item=nil, price=0, s_tax_status=nil, i_tax_status=nil)
-		@item=item
-		@price=price
-		@s_tax=s_tax_status
-		@i_tax=i_tax_status
-	end
-	attr_reader (:add_basket)
-
-	def start_shopping
-		puts "What can I get you?"
-		@item=gets.chomp
-		puts "Price:"
-		@price=gets.chomp
-		puts "Imported?(y/n)"
-		@i_tax_status=gets.chomp.upcase
-		puts "Tax exempt?(y/n)"
-		@s_tax_status=gets.chomp.upcase
-		puts "Would you like add another item?(y/n)"
-
-	end
-
-	def add_item
-		item_profile={}
-		item_profile.store(:price,@price)
-		item_profile.store(:s_tax, @s_tax_status)
-		item_profile.store(:i_tax, @i_tax_status)
-		@add_basket={}
-		@add_basket.store(@item,item_profile)
-	end
-
-end
-class CheckOut
-	def	initialize
-	end
-	attr_accessor (:my_basket)
-	def summary
-		my_basket.each do |key, value|
-			puts "#{key} --------> $#{value[:price].to_f.round(2)}"
-		end
-	end
-end
-
-my_basket={}
+#shopper Bill came into the shop
 bill=ShopBasket.new
 #Let's start putting things into basket#
-continue="Y"
-until continue=="N"
-bill.start_shopping
-bill.add_item
-my_basket.merge!(bill.add_basket)
-continue=gets.chomp.upcase
-end
-#Summerize items in basket#
-# my_basket.each do |key, value|
-# 	puts "#{key} --------> $#{value[:price].to_f.round(2)}"
-# end
-done=CheckOut.new
-done.summary
-
+bill.shop
+#Let's proceed to check out#
+customer_1=CheckOut.new(bill.shopping_basket)
+customer_1.cal_tax
+customer_1.print_reciept
 
 
