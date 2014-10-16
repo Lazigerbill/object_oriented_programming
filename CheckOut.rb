@@ -1,10 +1,14 @@
-
+# This is part of the Assignment SalesTax and is required handle the tax calculations and transaction summary.
 
 class CheckOut 
+	
 	def	initialize(checkout_basket)
-	@checkout_basket=checkout_basket
+		@checkout_basket=checkout_basket
 	end
+	
 	attr_accessor (:checkout_basket)
+	
+	# This method calculates taxes, import tax and sales tax separately
 	def cal_tax
 		@i_tax=0
 		@s_tax=0
@@ -34,10 +38,7 @@ class CheckOut
 			puts "#{key} : $#{value[:sum].round(2)}"
 		end
 		puts "Sales Taxes : $#{((@i_tax+@s_tax)*20).round/20.round(2)}"
-		puts "Total : $#{grand_total.round(2)}"
-		
+		puts "Total : $#{grand_total.round(2)}"	
 	end
-
-
 
 end

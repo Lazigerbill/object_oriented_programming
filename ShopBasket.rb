@@ -1,6 +1,7 @@
 #Putting things into your shopping basket#
 
 class ShopBasket
+	
 	def initialize (shopping_basket=nil)
 		@shopping_basket=shopping_basket
 	end
@@ -29,9 +30,9 @@ class ShopBasket
 		@shopping_basket={}
 		continue="Y"
 		until continue=="N"
-		user_input
-		@shopping_basket.merge!(@add)
-		continue=gets.chomp.upcase
+			user_input
+			@shopping_basket.merge!(@add)
+			continue=gets.chomp.upcase
 		end		
 		puts "Here is what you have in your shopping basket so far:"
 		@shopping_basket.each do |key, value|
